@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DentalSpa – Tu Sonrisa, Nuestra Pasión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --mint: #5BC4C0;
+    --mint-light: #A8E6E3;
+    --mint-pale: #E8F8F7;
+    --dark: #1A1A1A;
+    --mid: #4A4A4A;
+    --soft: #8A8A8A;
+    --cream: #FAF9F7;
+    --white: #FFFFFF;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--dark); overflow-x:hidden; }
+
+  /* ── PAGE SYSTEM ── */
+  .page { display:none; min-height:100vh; }
+  .page.active { display:block; }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:200;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 60px;
+    background:rgba(250,249,247,0.94);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(91,196,192,0.18);
+    transition:all .3s;
+  }
+  .nav-logo { display:flex; align-items:center; gap:10px; cursor:pointer; text-decoration:none; }
+  .nav-logo-icon { width:40px; height:40px; border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center; background:white; box-shadow:0 2px 8px rgba(91,196,192,.2); }
+  .nav-logo-icon img { width:100%; height:100%; object-fit:contain; }
+  .nav-logo-text { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--dark); letter-spacing:.03em; }
+  .nav-links { display:flex; gap:6px; list-style:none; align-items:center; }
+  .nav-links li a {
+    font-size:13px; font-weight:400; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--mid); text-decoration:none; padding:8px 14px; border-radius:8px;
+    transition:all .2s; cursor:pointer;
+  }
+  .nav-links li a:hover, .nav-links li a.active { color:var(--mint); background:var(--mint-pale); }
+  .nav-cta {
+    background:var(--mint) !important; color:white !important;
+    padding:10px 22px !important; border-radius:30px !important;
+    font-weight:500 !important;
+  }
+  .nav-cta:hover { background:#4AADA9 !important; }
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; }
+  .hamburger span { width:24px; height:2px; background:var(--dark); border-radius:2px; transition:.3s; }
+  .mobile-menu { display:none; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height:100vh;
+    display:grid; grid-template-columns:1fr 1fr;
+    align-items:center; padding:100px 60px 60px; gap:60px;
+  }
+  .hero-content { animation:fadeUp .9s ease both; }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--mint-pale); border:1px solid rgba(91,196,192,.3);
+    padding:6px 16px; border-radius:30px;
+    font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--mint); margin-bottom:28px;
+  }
+  .hero-badge::before { content:''; width:6px; height:6px; background:var(--mint); border-radius:50%; animation:pulse 2s ease infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+  .hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(46px,5.2vw,80px); font-weight:300; line-height:1.08; margin-bottom:24px; }
+  .hero h1 em { font-style:italic; color:var(--mint); }
+  .hero p { font-size:16px; line-height:1.7; color:var(--mid); max-width:440px; margin-bottom:44px; }
+  .hero-actions { display:flex; gap:16px; flex-wrap:wrap; }
+  .btn-primary { display:inline-flex; align-items:center; gap:10px; background:var(--dark); color:white; padding:15px 30px; border-radius:50px; font-size:14px; font-weight:500; text-decoration:none; transition:all .25s; cursor:pointer; border:none; }
+  .btn-primary:hover { background:var(--mint); transform:translateY(-2px); }
+  .btn-whatsapp { display:inline-flex; align-items:center; gap:10px; background:#25D366; color:white; padding:15px 30px; border-radius:50px; font-size:14px; font-weight:500; text-decoration:none; transition:all .25s; cursor:pointer; border:none; }
+  .btn-whatsapp:hover { background:#1EBB57; transform:translateY(-2px); box-shadow:0 8px 24px rgba(37,211,102,.35); }
+  .hero-stats { display:flex; gap:40px; margin-top:52px; padding-top:40px; border-top:1px solid rgba(0,0,0,.08); }
+  .stat-num { font-family:'Cormorant Garamond',serif; font-size:40px; font-weight:300; color:var(--mint); line-height:1; }
+  .stat-label { font-size:12px; color:var(--soft); letter-spacing:.06em; text-transform:uppercase; margin-top:4px; }
+  .hero-visual { position:relative; height:580px; animation:fadeUp .9s .2s ease both; }
+  .hero-img-main { position:absolute; top:0; right:0; width:78%; height:85%; border-radius:24px; overflow:hidden; box-shadow:0 24px 80px rgba(0,0,0,.14); }
+  .hero-img-main img { width:100%; height:100%; object-fit:cover; }
+  .hero-img-secondary { position:absolute; bottom:0; left:0; width:52%; height:54%; border-radius:20px; overflow:hidden; box-shadow:0 16px 50px rgba(0,0,0,.16); border:4px solid var(--cream); }
+  .hero-img-secondary img { width:100%; height:100%; object-fit:cover; }
+  .hero-float-card { position:absolute; top:44%; right:-20px; background:white; border-radius:16px; padding:16px 20px; box-shadow:0 12px 40px rgba(0,0,0,.12); display:flex; align-items:center; gap:12px; animation:float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .float-icon { width:44px; height:44px; background:var(--mint-pale); border-radius:12px; display:flex; align-items:center; justify-content:center; }
+  .float-text-main { font-size:13px; font-weight:500; color:var(--dark); }
+  .float-text-sub { font-size:11px; color:var(--soft); }
+
+  /* ── SECTION COMMONS ── */
+  section { padding:90px 60px; }
+  .section-label { font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--mint); font-weight:500; margin-bottom:14px; }
+  .section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,3.4vw,50px); font-weight:300; line-height:1.15; color:var(--dark); margin-bottom:18px; }
+  .section-sub { font-size:15px; line-height:1.7; color:var(--mid); max-width:520px; }
+
+  /* ── SERVICES ── */
+  #servicios-sec { background:var(--white); }
+  .services-header { text-align:center; margin-bottom:60px; }
+  .services-header .section-sub { margin:0 auto; }
+  .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .service-card { background:var(--cream); border-radius:20px; padding:34px 30px; transition:all .3s; border:1px solid transparent; }
+  .service-card:hover { background:white; border-color:var(--mint-light); transform:translateY(-5px); box-shadow:0 16px 48px rgba(91,196,192,.15); }
+  .service-icon { width:54px; height:54px; background:var(--mint-pale); border-radius:14px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
+  .service-icon svg { width:26px; height:26px; }
+  .service-card h3 { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; margin-bottom:10px; }
+  .service-card p { font-size:14px; line-height:1.65; color:var(--mid); }
+  .service-card .btn-service { margin-top:20px; display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--mint); font-weight:500; text-decoration:none; cursor:pointer; border:none; background:none; padding:0; }
+  .service-card .btn-service:hover { gap:10px; }
+  .service-card .btn-service svg { width:14px; height:14px; transition:transform .2s; }
+  .service-card .btn-service:hover svg { transform:translateX(3px); }
+
+  /* ── GALLERY ── */
+  #galeria-sec { background:var(--cream); }
+  .gallery-layout { display:grid; grid-template-columns:1.2fr 1fr 1fr; grid-template-rows:280px 280px; gap:16px; margin-top:52px; }
+  .gallery-item { border-radius:18px; overflow:hidden; position:relative; cursor:pointer; }
+  .gallery-item img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
+  .gallery-item:hover img { transform:scale(1.05); }
+  .gallery-item.tall { grid-row:span 2; }
+  .gallery-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(26,26,26,.45) 0%,transparent 60%); opacity:0; transition:opacity .3s; display:flex; align-items:flex-end; padding:20px; }
+  .gallery-item:hover .gallery-overlay { opacity:1; }
+  .gallery-overlay-text { color:white; font-size:14px; font-weight:500; }
+
+  /* ── DOCTOR ── */
+  #doctora-sec { background:var(--dark); color:white; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+  .doctor-img { border-radius:24px; overflow:hidden; height:560px; }
+  .doctor-img img { width:100%; height:100%; object-fit:cover; object-position:top; }
+  #doctora-sec .section-label { color:var(--mint-light); }
+  #doctora-sec .section-title { color:white; }
+  .doctor-badges { display:flex; gap:10px; flex-wrap:wrap; margin-top:28px; }
+  .doctor-badge { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.07); border:1px solid rgba(91,196,192,.3); padding:9px 16px; border-radius:30px; font-size:13px; color:var(--mint-light); }
+  .doctor-badge svg { width:14px; height:14px; fill:var(--mint); flex-shrink:0; }
+
+  /* ── TECH ── */
+  #tecnologia-sec { background:var(--mint-pale); text-align:center; }
+  .tech-content { max-width:700px; margin:0 auto; }
+  .tech-img { width:100%; max-width:800px; border-radius:24px; overflow:hidden; margin:44px auto 0; box-shadow:0 24px 80px rgba(91,196,192,.2); display:block; }
+  .tech-img img { width:100%; display:block; }
+  .tech-features { display:flex; justify-content:center; gap:48px; margin-top:48px; flex-wrap:wrap; }
+  .tech-feature-icon { width:52px; height:52px; background:white; border-radius:14px; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; box-shadow:0 4px 16px rgba(91,196,192,.15); }
+  .tech-feature-icon svg { width:26px; height:26px; }
+  .tech-feature-title { font-size:14px; font-weight:500; color:var(--dark); }
+  .tech-feature-sub { font-size:12px; color:var(--mid); margin-top:3px; }
+
+  /* ── CITA ── */
+  #cita-sec { background:var(--white); text-align:center; }
+  .cita-container { max-width:680px; margin:0 auto; }
+  .whatsapp-big { display:inline-flex; align-items:center; gap:14px; background:#25D366; color:white; padding:20px 48px; border-radius:60px; font-size:18px; font-weight:500; text-decoration:none; transition:all .3s; box-shadow:0 8px 40px rgba(37,211,102,.3); }
+  .whatsapp-big:hover { background:#1EBB57; transform:translateY(-3px); box-shadow:0 16px 56px rgba(37,211,102,.4); }
+  .whatsapp-big svg { width:28px; height:28px; }
+  .cita-note { margin-top:20px; font-size:13px; color:var(--soft); }
+  .cita-options { display:flex; justify-content:center; gap:18px; margin-top:44px; flex-wrap:wrap; }
+  .cita-option { background:var(--cream); border-radius:16px; padding:22px 24px; flex:1; min-width:150px; max-width:180px; text-align:center; }
+  .cita-option-icon { width:44px; height:44px; background:var(--mint-pale); border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; }
+  .cita-option-icon svg { width:22px; height:22px; }
+  .cita-option-title { font-size:13px; font-weight:500; color:var(--dark); }
+  .cita-option-sub { font-size:12px; color:var(--soft); margin-top:3px; }
+
+  /* ── CONTACT PAGE ── */
+  .contact-hero { min-height:40vh; background:var(--dark); display:flex; align-items:center; padding:120px 60px 60px; }
+  .contact-hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(40px,5vw,70px); font-weight:300; color:white; }
+  .contact-hero h1 em { font-style:italic; color:var(--mint-light); }
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; padding:80px 60px; background:var(--cream); }
+  .contact-info h2 { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; margin-bottom:36px; }
+  .contact-item { display:flex; gap:16px; margin-bottom:28px; align-items:flex-start; }
+  .contact-item-icon { width:46px; height:46px; background:var(--mint-pale); border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .contact-item-icon svg { width:22px; height:22px; }
+  .contact-item-title { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--soft); margin-bottom:4px; }
+  .contact-item-value { font-size:15px; color:var(--dark); font-weight:400; }
+  .contact-item-value a { color:var(--dark); text-decoration:none; }
+  .contact-item-value a:hover { color:var(--mint); }
+  .contact-map { border-radius:20px; overflow:hidden; height:380px; background:#e0e0e0; position:relative; }
+  .contact-map iframe { width:100%; height:100%; border:none; }
+  .contact-wa-section { background:var(--mint-pale); padding:80px 60px; text-align:center; }
+  .contact-wa-section h2 { font-family:'Cormorant Garamond',serif; font-size:40px; font-weight:300; margin-bottom:16px; }
+  .contact-wa-section p { color:var(--mid); font-size:15px; margin-bottom:36px; }
+  .wa-buttons { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
+  .wa-btn { display:inline-flex; align-items:center; gap:10px; background:#25D366; color:white; padding:14px 28px; border-radius:50px; font-size:14px; font-weight:500; text-decoration:none; transition:all .25s; }
+  .wa-btn:hover { background:#1EBB57; transform:translateY(-2px); }
+  .wa-btn svg { width:18px; height:18px; }
+  .wa-btn.outlined { background:transparent; border:2px solid #25D366; color:#1A1A1A; }
+  .wa-btn.outlined svg path { fill:#25D366; }
+  .wa-btn.outlined:hover { background:#25D366; color:white; }
+
+  /* ── SERVICES PAGE ── */
+  .services-hero { min-height:40vh; background:var(--dark); display:flex; align-items:center; padding:120px 60px 60px; }
+  .services-hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(40px,5vw,70px); font-weight:300; color:white; }
+  .services-hero h1 em { font-style:italic; color:var(--mint-light); }
+  .services-detail { padding:80px 60px; background:var(--cream); }
+  .service-detail-card { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; padding:60px 0; border-bottom:1px solid rgba(0,0,0,.07); }
+  .service-detail-card:last-child { border-bottom:none; }
+  .service-detail-card.reverse { direction:rtl; }
+  .service-detail-card.reverse > * { direction:ltr; }
+  .service-detail-img { border-radius:20px; overflow:hidden; height:320px; background:var(--mint-pale); display:flex; align-items:center; justify-content:center; }
+  .service-detail-img svg { width:100px; height:100px; opacity:.25; }
+  .service-detail-icon { width:60px; height:60px; background:var(--mint-pale); border-radius:16px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
+  .service-detail-icon svg { width:30px; height:30px; }
+  .service-detail-text h2 { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:300; margin-bottom:16px; }
+  .service-detail-text p { font-size:15px; line-height:1.7; color:var(--mid); margin-bottom:14px; }
+  .service-features { list-style:none; margin-top:16px; }
+  .service-features li { display:flex; align-items:center; gap:10px; font-size:14px; color:var(--mid); margin-bottom:8px; }
+  .service-features li::before { content:''; width:20px; height:20px; background:var(--mint-pale); border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .check-icon { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; background:var(--mint-pale); border-radius:50%; flex-shrink:0; }
+  .check-icon svg { width:11px; height:11px; }
+
+  /* ── ABOUT PAGE ── */
+  .about-hero { min-height:50vh; background:linear-gradient(135deg, var(--dark) 0%, #2a3a3a 100%); display:flex; align-items:center; padding:120px 60px 60px; }
+  .about-hero-content { max-width:700px; }
+  .about-hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(40px,5vw,70px); font-weight:300; color:white; margin-bottom:20px; }
+  .about-hero h1 em { font-style:italic; color:var(--mint-light); }
+  .about-hero p { font-size:16px; color:rgba(255,255,255,.65); line-height:1.7; }
+  .about-mission { display:grid; grid-template-columns:1fr 1fr; gap:60px; padding:80px 60px; background:var(--white); align-items:center; }
+  .about-mission-img { border-radius:24px; overflow:hidden; height:480px; }
+  .about-mission-img img { width:100%; height:100%; object-fit:cover; object-position:top; }
+  .about-values { padding:80px 60px; background:var(--cream); }
+  .values-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:52px; }
+  .value-card { background:white; border-radius:20px; padding:36px 30px; border-top:3px solid var(--mint); }
+  .value-icon { width:52px; height:52px; background:var(--mint-pale); border-radius:14px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
+  .value-icon svg { width:26px; height:26px; }
+  .value-card h3 { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; margin-bottom:10px; }
+  .value-card p { font-size:14px; line-height:1.65; color:var(--mid); }
+  .about-team { padding:80px 60px; background:var(--white); text-align:center; }
+  .team-card { max-width:440px; margin:52px auto 0; background:var(--cream); border-radius:24px; overflow:hidden; }
+  .team-card-img { height:380px; overflow:hidden; }
+  .team-card-img img { width:100%; height:100%; object-fit:cover; object-position:top; }
+  .team-card-body { padding:28px 32px 32px; text-align:left; }
+  .team-card-body h3 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:400; margin-bottom:6px; }
+  .team-card-body .role { font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--mint); margin-bottom:16px; }
+  .team-card-body p { font-size:14px; line-height:1.65; color:var(--mid); }
+
+  /* ── FOOTER ── */
+  footer { background:var(--dark); color:white; padding:60px 60px 36px; }
+  .footer-grid { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:48px; }
+  .footer-logo { display:flex; align-items:center; gap:10px; margin-bottom:16px; cursor:pointer; }
+  .footer-logo-icon { width:34px; height:34px; background:var(--mint); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .footer-logo-text { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:white; }
+  .footer-desc { font-size:14px; line-height:1.7; color:rgba(255,255,255,.5); max-width:240px; }
+  footer h4 { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--mint-light); margin-bottom:18px; }
+  footer ul { list-style:none; }
+  footer ul li { margin-bottom:10px; }
+  footer ul li a, footer ul li span { font-size:14px; color:rgba(255,255,255,.55); text-decoration:none; cursor:pointer; }
+  footer ul li a:hover, footer ul li span:hover { color:white; }
+  .footer-bottom { grid-column:1/-1; padding-top:28px; border-top:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-between; align-items:center; font-size:12px; color:rgba(255,255,255,.3); flex-wrap:wrap; gap:12px; }
+  .footer-social { display:flex; gap:10px; }
+  .footer-social a { width:34px; height:34px; background:rgba(255,255,255,.07); border-radius:8px; display:flex; align-items:center; justify-content:center; transition:background .2s; text-decoration:none; }
+  .footer-social a:hover { background:var(--mint); }
+  .footer-social a svg { width:16px; height:16px; fill:rgba(255,255,255,.6); }
+
+  /* ── FLOATING WA ── */
+  .floating-wa { position:fixed; bottom:32px; right:32px; z-index:300; width:60px; height:60px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 32px rgba(37,211,102,.45); text-decoration:none; transition:all .3s; animation:bounceIn .6s 1.2s both; }
+  .floating-wa:hover { transform:scale(1.1); box-shadow:0 12px 44px rgba(37,211,102,.55); }
+  .floating-wa svg { width:30px; height:30px; fill:white; }
+  .floating-wa-pulse { position:absolute; inset:-4px; border-radius:50%; background:rgba(37,211,102,.3); animation:waPulse 2.5s ease infinite; }
+  @keyframes waPulse { 0%{transform:scale(1);opacity:.7} 100%{transform:scale(1.6);opacity:0} }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes bounceIn { 0%{opacity:0;transform:scale(.5)} 70%{transform:scale(1.1)} 100%{opacity:1;transform:scale(1)} }
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* ── MOBILE ── */
+  @media(max-width:900px){
+    nav { padding:16px 24px; }
+    .nav-links { display:none; }
+    .hamburger { display:flex; }
+    .mobile-menu { display:none; position:fixed; top:70px; left:0; right:0; background:rgba(250,249,247,.97); backdrop-filter:blur(14px); padding:20px 24px; z-index:199; border-bottom:1px solid rgba(91,196,192,.2); }
+    .mobile-menu.open { display:block; }
+    .mobile-menu a { display:block; padding:12px 0; font-size:15px; color:var(--mid); text-decoration:none; border-bottom:1px solid rgba(0,0,0,.06); cursor:pointer; }
+    .mobile-menu a:last-child { border:none; }
+    .hero { grid-template-columns:1fr; padding:90px 24px 48px; }
+    .hero-visual { height:340px; }
+    .hero-float-card { display:none; }
+    .hero-stats { gap:24px; }
+    section { padding:60px 24px; }
+    .services-grid { grid-template-columns:1fr; }
+    .gallery-layout { grid-template-columns:1fr 1fr; grid-template-rows:200px 200px 200px; }
+    .gallery-item.tall { grid-row:span 1; }
+    #doctora-sec { grid-template-columns:1fr; padding:60px 24px; }
+    .doctor-img { height:340px; }
+    .contact-grid { grid-template-columns:1fr; padding:60px 24px; }
+    .about-mission { grid-template-columns:1fr; padding:60px 24px; }
+    .values-grid { grid-template-columns:1fr; }
+    .service-detail-card { grid-template-columns:1fr; gap:32px; }
+    .service-detail-card.reverse { direction:ltr; }
+    .services-detail { padding:60px 24px; }
+    .services-hero, .about-hero, .contact-hero { padding:100px 24px 48px; }
+    footer { padding:48px 24px 32px; }
+    .footer-grid { grid-template-columns:1fr 1fr; gap:32px; }
+    .contact-wa-section { padding:60px 24px; }
+    .about-values { padding:60px 24px; }
+    .about-team { padding:60px 24px; }
+  }
+  @media(max-width:560px){
+    .gallery-layout { grid-template-columns:1fr; grid-template-rows:auto; }
+    .gallery-item { height:220px; }
+    .footer-grid { grid-template-columns:1fr; }
+    .cita-options { flex-direction:column; align-items:center; }
+    .services-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-icon"><img src="https://i.ibb.co/d0z3b1Jm/Logo.png" alt="DentalSpa Logo"></div>
+    <span class="nav-logo-text">DentalSpa</span>
+  </div>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" data-page="home" class="active">Inicio</a></li>
+    <li><a onclick="showPage('servicios')" data-page="servicios">Servicios</a></li>
+    <li><a onclick="showPage('nosotros')" data-page="nosotros">Nosotros</a></li>
+    <li><a onclick="showPage('contacto')" data-page="contacto">Contacto</a></li>
+    <li><a onclick="goWhatsApp('Hola, me gustaría agendar una cita en DentalSpa. ¿Pueden ayudarme?')" class="nav-cta">Agendar Cita</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a onclick="showPage('home');toggleMenu()">Inicio</a>
+  <a onclick="showPage('servicios');toggleMenu()">Servicios</a>
+  <a onclick="showPage('nosotros');toggleMenu()">Nosotros</a>
+  <a onclick="showPage('contacto');toggleMenu()">Contacto</a>
+  <a onclick="goWhatsApp('Hola, me gustaría agendar una cita en DentalSpa. ¿Pueden ayudarme?')">📅 Agendar Cita</a>
+</div>
+
+<!-- ═══════════════ HOME PAGE ═══════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="hero-content">
+      <div class="hero-badge">Especialistas en tu sonrisa</div>
+      <h1>Cuida tu<br><em>salud dental</em><br>con expertos</h1>
+      <p>En DentalSpa combinamos tecnología de vanguardia con un trato cálido y personalizado. Tu comodidad y salud bucal son nuestra prioridad.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('servicios')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          Ver Servicios
+        </button>
+        <a href="https://wa.me/525564030900?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20cita%20en%20DentalSpa.%20%C2%BFPueden%20ayudarme%3F" target="_blank" class="btn-whatsapp">
+          <svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><div class="stat-num">6+</div><div class="stat-label">Especialidades</div></div>
+        <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Tecnología Digital</div></div>
+        <div class="stat-item"><div class="stat-num">⭐5.0</div><div class="stat-label">Google Maps</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img-main">
+        <img src="https://i.ibb.co/HDsJGRy3/2025-06-27.jpg" alt="Doctora DentalSpa">
+      </div>
+      <div class="hero-img-secondary">
+        <img src="https://i.ibb.co/XHBPV9M/2025-06-04.jpg" alt="Recepción DentalSpa">
+      </div>
+      <div class="hero-float-card">
+        <div class="float-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M11 8v3M11 11h3"/></svg>
+        </div>
+        <div>
+          <div class="float-text-main">Microscopio Dental</div>
+          <div class="float-text-sub">Tecnología de vanguardia</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS PREVIEW -->
+  <section id="servicios-sec" style="background:var(--white)">
+    <div class="services-header reveal">
+      <div class="section-label">Lo que ofrecemos</div>
+      <h2 class="section-title">Nuestras Especialidades</h2>
+      <p class="section-sub">Contamos con especialistas en cada área para brindarte la atención más completa y personalizada.</p>
+    </div>
+    <div class="services-grid">
+      <!-- Ortodoncia -->
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3C9 3 7 5 7 7.5c0 1 .3 2 .8 2.8L7 19h10l-.8-8.7c.5-.8.8-1.8.8-2.8C17 5 15 3 12 3z"/>
+            <line x1="9" y1="14" x2="15" y2="14"/>
+            <line x1="9.5" y1="11" x2="9.5" y2="17"/>
+            <line x1="14.5" y1="11" x2="14.5" y2="17"/>
+          </svg>
+        </div>
+        <h3>Ortodoncia</h3>
+        <p>Alineamos tu sonrisa con brackets tradicionales o alineadores transparentes para un resultado perfecto.</p>
+        <button class="btn-service" onclick="showPage('servicios')">Ver más <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <!-- Cirugía -->
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 7L8.5 18.5 3 13l2-2 3.5 3.5L18 5l2 2z"/>
+            <line x1="15" y1="5" x2="19" y2="9"/>
+          </svg>
+        </div>
+        <h3>Cirugía Oral</h3>
+        <p>Procedimientos quirúrgicos con precisión milimétrica y el mayor confort para el paciente.</p>
+        <button class="btn-service" onclick="showPage('servicios')">Ver más <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <!-- Implantes -->
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="10" y="2" width="4" height="8" rx="2"/>
+            <path d="M10 10h4l1 5H9l1-5z"/>
+            <path d="M9 15h6v2a3 3 0 01-6 0v-2z"/>
+          </svg>
+        </div>
+        <h3>Implantología</h3>
+        <p>Reemplaza dientes perdidos con implantes de titanio de alta calidad para una sonrisa completa y natural.</p>
+        <button class="btn-service" onclick="showPage('servicios')">Ver más <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <!-- Prótesis -->
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 14c0 3.3 2.7 6 6 6h4c3.3 0 6-2.7 6-6V8H4v6z"/>
+            <path d="M4 8c0-2.2 1.8-4 4-4h8c2.2 0 4 1.8 4 4"/>
+            <line x1="8" y1="12" x2="8" y2="17"/><line x1="12" y1="11" x2="12" y2="18"/><line x1="16" y1="12" x2="16" y2="17"/>
+          </svg>
+        </div>
+        <h3>Prótesis Dental</h3>
+        <p>Restauramos tu dentadura con prótesis fijas y removibles que lucen y funcionan como dientes naturales.</p>
+        <button class="btn-service" onclick="showPage('servicios')">Ver más <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <!-- Periodoncia -->
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 21C8.7 21 6 18.3 6 15V9a6 6 0 1112 0v6c0 3.3-2.7 6-6 6z"/>
+            <path d="M9 12c0-1.7 1.3-3 3-3s3 1.3 3 3"/>
+            <line x1="12" y1="9" x2="12" y2="6"/>
+          </svg>
+        </div>
+        <h3>Periodoncia</h3>
+        <p>Tratamos y prevenimos enfermedades de las encías para mantener la salud de los tejidos de soporte.</p>
+        <button class="btn-service" onclick="showPage('servicios')">Ver más <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <!-- Endodoncia -->
+      <div class="service-card reveal">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="10" r="3"/>
+            <path d="M9 10v7a3 3 0 006 0v-7"/>
+            <path d="M7 7C7 4.2 9.2 2 12 2s5 2.2 5 5"/>
+            <line x1="10" y1="13" x2="10" y2="17"/><line x1="14" y1="13" x2="14" y2="17"/>
+          </svg>
+        </div>
+        <h3>Endodoncia</h3>
+        <p>Tratamiento de conductos con microscopio dental para máxima precisión, sin dolor y excelentes resultados.</p>
+        <button class="btn-service" onclick="showPage('servicios')">Ver más <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="galeria-sec">
+    <div class="reveal">
+      <div class="section-label">Nuestras instalaciones</div>
+      <h2 class="section-title">Una clínica diseñada<br>para tu bienestar</h2>
+    </div>
+    <div class="gallery-layout">
+      <div class="gallery-item tall reveal"><img src="https://i.ibb.co/LhsgKMDR/2025-06-04-2.jpg" alt="Sala de espera"><div class="gallery-overlay"><span class="gallery-overlay-text">Sala de espera</span></div></div>
+      <div class="gallery-item reveal"><img src="https://i.ibb.co/HpPXRWFn/2025-06-04-3.jpg" alt="Pasillo"><div class="gallery-overlay"><span class="gallery-overlay-text">Instalaciones</span></div></div>
+      <div class="gallery-item reveal"><img src="https://i.ibb.co/twy1dzjP/2025-06-04-1.jpg" alt="Área privada"><div class="gallery-overlay"><span class="gallery-overlay-text">Confort y privacidad</span></div></div>
+      <div class="gallery-item reveal"><img src="https://i.ibb.co/C5qYx8Gw/2025-06-04-4.jpg" alt="Arte dental"><div class="gallery-overlay"><span class="gallery-overlay-text">Arte dental</span></div></div>
+      <div class="gallery-item reveal"><img src="https://i.ibb.co/XHBPV9M/2025-06-04.jpg" alt="Recepción"><div class="gallery-overlay"><span class="gallery-overlay-text">Recepción</span></div></div>
+    </div>
+  </section>
+
+  <!-- DOCTORA -->
+  <section id="doctora-sec">
+    <div class="doctor-img reveal">
+      <img src="https://i.ibb.co/HDsJGRy3/2025-06-27.jpg" alt="Doctora DentalSpa">
+    </div>
+    <div class="reveal">
+      <div class="section-label">Tu especialista</div>
+      <h2 class="section-title" style="color:white">Atención experta<br>y personalizada</h2>
+      <p class="section-sub" style="color:rgba(255,255,255,.65)">Nuestra doctora especialista combina años de experiencia clínica con las técnicas más avanzadas en odontología moderna, utilizando microscopio dental para resultados de excelencia.</p>
+      <div class="doctor-badges">
+        <div class="doctor-badge"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#5BC4C0" stroke-width="2" fill="none" stroke-linecap="round"/></svg>Endodoncista certificada</div>
+        <div class="doctor-badge"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#5BC4C0" stroke-width="2" fill="none" stroke-linecap="round"/></svg>Microscopio dental</div>
+        <div class="doctor-badge"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#5BC4C0" stroke-width="2" fill="none" stroke-linecap="round"/></svg>Tecnología digital</div>
+        <div class="doctor-badge"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#5BC4C0" stroke-width="2" fill="none" stroke-linecap="round"/></svg>Atención personalizada</div>
+      </div>
+      <div style="margin-top:36px;">
+        <button onclick="showPage('nosotros')" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Conocer más
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECNOLOGÍA -->
+  <section id="tecnologia-sec">
+    <div class="tech-content reveal">
+      <div class="section-label">Innovación</div>
+      <h2 class="section-title">Microscopio Dental<br>para resultados superiores</h2>
+      <p class="section-sub" style="margin:0 auto">Somos una de las pocas clínicas que utiliza microscopio dental operatorio de última generación, permitiendo diagnósticos más precisos y tratamientos de mayor calidad.</p>
+    </div>
+    <div class="tech-img reveal"><img src="https://i.ibb.co/VYtnv0DY/2026-02-17.jpg" alt="Microscopio dental en uso"></div>
+    <div class="tech-features reveal">
+      <div class="tech-feature">
+        <div class="tech-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/><path d="M20 20l-3.5-3.5"/></svg></div>
+        <div class="tech-feature-title">Microscopio Dental</div>
+        <div class="tech-feature-sub">Precisión máxima</div>
+      </div>
+      <div class="tech-feature">
+        <div class="tech-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3,10 12,15 21,10"/></svg></div>
+        <div class="tech-feature-title">Diagnóstico Digital</div>
+        <div class="tech-feature-sub">Imágenes de alta resolución</div>
+      </div>
+      <div class="tech-feature">
+        <div class="tech-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="tech-feature-title">Esterilización Total</div>
+        <div class="tech-feature-sub">Protocolo certificado</div>
+      </div>
+      <div class="tech-feature">
+        <div class="tech-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+        <div class="tech-feature-title">Sin Dolor</div>
+        <div class="tech-feature-sub">Tratamientos cómodos</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGENDAR CITA -->
+  <section id="cita-sec">
+    <div class="cita-container">
+      <div class="reveal">
+        <div class="section-label">Fácil y rápido</div>
+        <h2 class="section-title">Agenda tu cita<br>en segundos</h2>
+        <p class="section-sub" style="margin:0 auto">Escríbenos por WhatsApp y con gusto te atendemos de inmediato para encontrar el horario ideal para ti.</p>
+      </div>
+      <div class="reveal" style="margin-top:40px">
+        <a href="https://wa.me/525564030900?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20cita%20en%20DentalSpa.%20%C2%BFPueden%20ayudarme%3F" target="_blank" class="whatsapp-big">
+          <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Escribirnos por WhatsApp
+        </a>
+        <p class="cita-note">Respondemos en minutos · Lunes a Sábado</p>
+      </div>
+      <div class="cita-options reveal">
+        <div class="cita-option">
+          <div class="cita-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
+          <div class="cita-option-title">Respuesta rápida</div>
+          <div class="cita-option-sub">En minutos</div>
+        </div>
+        <div class="cita-option">
+          <div class="cita-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="cita-option-title">Horarios flexibles</div>
+          <div class="cita-option-sub">Lun – Sáb</div>
+        </div>
+        <div class="cita-option">
+          <div class="cita-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="cita-option-title">Primera consulta</div>
+          <div class="cita-option-sub">Evaluación gratuita</div>
+        </div>
+        <div class="cita-option">
+          <div class="cita-option-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div class="cita-option-title">Ubicación</div>
+          <div class="cita-option-sub">CDMX, Hipódromo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER HOME -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo" onclick="showPage('home')">
+          <div class="footer-logo-icon" style="overflow:hidden;border-radius:50%;background:white;"><img src="https://i.ibb.co/d0z3b1Jm/Logo.png" alt="Logo" style="width:100%;height:100%;object-fit:contain;"></div>
+          <span class="footer-logo-text">DentalSpa</span>
+        </div>
+        <p class="footer-desc">Clínica dental especializada con tecnología de vanguardia y el trato más humano y profesional en CDMX.</p>
+        <div class="footer-social" style="margin-top:20px">
+          <a href="https://wa.me/525564030900" target="_blank" title="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+          <a href="https://maps.app.goo.gl/aPU86CDpbwGheztTA" target="_blank" title="Google Maps"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Servicios</h4>
+        <ul>
+          <li><span onclick="showPage('servicios')">Ortodoncia</span></li>
+          <li><span onclick="showPage('servicios')">Implantología</span></li>
+          <li><span onclick="showPage('servicios')">Endodoncia</span></li>
+          <li><span onclick="showPage('servicios')">Periodoncia</span></li>
+          <li><span onclick="showPage('servicios')">Cirugía Oral</span></li>
+          <li><span onclick="showPage('servicios')">Prótesis Dental</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Clínica</h4>
+        <ul>
+          <li><span onclick="showPage('nosotros')">Nosotros</span></li>
+          <li><span onclick="showPage('nosotros')">Nuestra Doctora</span></li>
+          <li><span onclick="showPage('nosotros')">Tecnología</span></li>
+          <li><span onclick="showPage('contacto')">Contacto</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="https://wa.me/525564030900" target="_blank">+52 55 6403 0900</a></li>
+          <li><span onclick="showPage('contacto')">Ver ubicación</span></li>
+          <li style="color:rgba(255,255,255,.4);font-size:13px;margin-top:8px">Altata 53, Hipódromo<br>Cuauhtémoc, CDMX</li>
+        </ul>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 DentalSpa · Todos los derechos reservados</span>
+        <span>Ciudad de México, México</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════ SERVICIOS PAGE ═══════════════ -->
+<div id="page-servicios" class="page">
+  <div class="services-hero">
+    <div>
+      <div class="section-label" style="color:var(--mint-light)">Lo que hacemos</div>
+      <h1>Nuestros <em>Servicios</em><br>Dentales</h1>
+    </div>
+  </div>
+
+  <div class="services-detail">
+    <!-- Endodoncia -->
+    <div class="service-detail-card">
+      <div class="service-detail-img" style="background:var(--mint-pale)">
+        <img src="https://i.ibb.co/VYtnv0DY/2026-02-17.jpg" alt="Endodoncia" style="width:100%;height:100%;object-fit:cover;border-radius:20px">
+      </div>
+      <div class="service-detail-text reveal">
+        <div class="service-detail-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="10" r="3"/><path d="M9 10v7a3 3 0 006 0v-7"/><path d="M7 7C7 4.2 9.2 2 12 2s5 2.2 5 5"/><line x1="10" y1="13" x2="10" y2="17"/><line x1="14" y1="13" x2="14" y2="17"/></svg>
+        </div>
+        <h2>Endodoncia</h2>
+        <p>El tratamiento de conductos es uno de los procedimientos más delicados en odontología. En DentalSpa lo realizamos con microscopio dental de última generación para máxima precisión.</p>
+        <p>Nuestra tecnología permite visualizar estructuras de menos de 1mm, garantizando que el tratamiento sea completo, efectivo y sin dolor.</p>
+        <ul class="service-features">
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Con microscopio dental operatorio</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Anestesia efectiva, sin dolor</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Recupera tu diente natural</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Resultados duraderos</li>
+        </ul>
+        <a href="https://wa.me/525564030900?text=Hola%2C%20me%20interesa%20saber%20más%20sobre%20Endodoncia.%20%C2%BFPueden%20ayudarme%3F" target="_blank" class="btn-whatsapp" style="margin-top:24px;display:inline-flex">
+          <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Preguntar por este servicio
+        </a>
+      </div>
+    </div>
+
+    <!-- Ortodoncia -->
+    <div class="service-detail-card reverse">
+      <div class="service-detail-img" style="background:#E8F4F8">
+        <img src="https://i.ibb.co/LhsgKMDR/2025-06-04-2.jpg" alt="Ortodoncia" style="width:100%;height:100%;object-fit:cover;border-radius:20px">
+      </div>
+      <div class="service-detail-text reveal">
+        <div class="service-detail-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><path d="M12 3C9 3 7 5 7 7.5c0 1 .3 2 .8 2.8L7 19h10l-.8-8.7c.5-.8.8-1.8.8-2.8C17 5 15 3 12 3z"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+        </div>
+        <h2>Ortodoncia</h2>
+        <p>Corregimos la posición de los dientes y la mordida para mejorar tanto la estética como la función masticatoria. Ofrecemos varias opciones para adaptarnos a tu estilo de vida.</p>
+        <ul class="service-features">
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Brackets metálicos tradicionales</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Alineadores transparentes (Invisalign)</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Ortodoncia estética (brackets cerámicos)</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Ortopedia maxilar para niños</li>
+        </ul>
+        <a href="https://wa.me/525564030900?text=Hola%2C%20me%20interesa%20saber%20más%20sobre%20Ortodoncia.%20%C2%BFPueden%20ayudarme%3F" target="_blank" class="btn-whatsapp" style="margin-top:24px;display:inline-flex">
+          <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Preguntar por este servicio
+        </a>
+      </div>
+    </div>
+
+    <!-- Implantología -->
+    <div class="service-detail-card">
+      <div class="service-detail-img" style="background:var(--mint-pale);display:flex;align-items:center;justify-content:center">
+        <svg viewBox="0 0 100 100" width="120" height="120" fill="none" stroke="#5BC4C0" stroke-width="2.5" stroke-linecap="round">
+          <rect x="42" y="10" width="16" height="32" rx="8"/>
+          <path d="M42 42h16l4 20H38l4-20z"/>
+          <path d="M38 62h24v8a12 12 0 01-24 0v-8z"/>
+        </svg>
+      </div>
+      <div class="service-detail-text reveal">
+        <div class="service-detail-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><rect x="10" y="2" width="4" height="8" rx="2"/><path d="M10 10h4l1 5H9l1-5z"/><path d="M9 15h6v2a3 3 0 01-6 0v-2z"/></svg>
+        </div>
+        <h2>Implantología</h2>
+        <p>Los implantes dentales son la solución más natural y duradera para reemplazar dientes perdidos. Se integran completamente al hueso maxilar, actuando como raíces artificiales.</p>
+        <ul class="service-features">
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Implantes de titanio de alta calidad</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Planificación digital con tomografía</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Implantes unitarios y múltiples</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Carga inmediata (diente en un día)</li>
+        </ul>
+        <a href="https://wa.me/525564030900?text=Hola%2C%20me%20interesa%20saber%20más%20sobre%20Implantes%20Dentales.%20%C2%BFPueden%20ayudarme%3F" target="_blank" class="btn-whatsapp" style="margin-top:24px;display:inline-flex">
+          <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Preguntar por este servicio
+        </a>
+      </div>
+    </div>
+
+    <!-- Periodoncia -->
+    <div class="service-detail-card reverse">
+      <div class="service-detail-img">
+        <img src="https://i.ibb.co/XHBPV9M/2025-06-04.jpg" alt="Clínica" style="width:100%;height:100%;object-fit:cover;border-radius:20px">
+      </div>
+      <div class="service-detail-text reveal">
+        <div class="service-detail-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><path d="M12 21C8.7 21 6 18.3 6 15V9a6 6 0 1112 0v6c0 3.3-2.7 6-6 6z"/></svg>
+        </div>
+        <h2>Periodoncia</h2>
+        <p>Las enfermedades de las encías afectan a millones de personas y son la principal causa de pérdida dental en adultos. El tratamiento a tiempo puede prevenir consecuencias graves.</p>
+        <ul class="service-features">
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Tratamiento de gingivitis y periodontitis</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Curetaje y raspado radicular</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Cirugía periodontal</li>
+          <li><span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></span>Mantenimiento preventivo</li>
+        </ul>
+        <a href="https://wa.me/525564030900?text=Hola%2C%20me%20interesa%20saber%20más%20sobre%20Periodoncia.%20%C2%BFPueden%20ayudarme%3F" target="_blank" class="btn-whatsapp" style="margin-top:24px;display:inline-flex">
+          <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Preguntar por este servicio
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Servicios -->
+  <section style="background:var(--dark);text-align:center;padding:80px 60px">
+    <div class="section-label" style="color:var(--mint-light)">¿Tienes dudas?</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:white;margin-bottom:16px">Escríbenos, con gusto<br><em style="color:var(--mint-light)">te orientamos</em></h2>
+    <p style="color:rgba(255,255,255,.6);font-size:15px;margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto">Nuestro equipo está disponible para resolver tus dudas y orientarte sobre el tratamiento más adecuado para ti.</p>
+    <a href="https://wa.me/525564030900?text=Hola%2C%20quisiera%20información%20sobre%20los%20servicios%20de%20DentalSpa" target="_blank" class="whatsapp-big">
+      <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Consultar por WhatsApp
+    </a>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo" onclick="showPage('home')"><div class="footer-logo-icon" style="overflow:hidden;border-radius:50%;background:white;"><img src="https://i.ibb.co/d0z3b1Jm/Logo.png" alt="Logo" style="width:100%;height:100%;object-fit:contain;"></div><span class="footer-logo-text">DentalSpa</span></div>
+        <p class="footer-desc">Clínica dental especializada con tecnología de vanguardia en CDMX.</p>
+      </div>
+      <div><h4>Servicios</h4><ul><li><span onclick="showPage('servicios')">Ortodoncia</span></li><li><span onclick="showPage('servicios')">Implantología</span></li><li><span onclick="showPage('servicios')">Endodoncia</span></li><li><span onclick="showPage('servicios')">Periodoncia</span></li></ul></div>
+      <div><h4>Clínica</h4><ul><li><span onclick="showPage('nosotros')">Nosotros</span></li><li><span onclick="showPage('contacto')">Contacto</span></li></ul></div>
+      <div><h4>Contacto</h4><ul><li><a href="https://wa.me/525564030900" target="_blank">+52 55 6403 0900</a></li><li style="color:rgba(255,255,255,.4);font-size:13px;margin-top:8px">Altata 53, Hipódromo<br>Cuauhtémoc, CDMX</li></ul></div>
+      <div class="footer-bottom"><span>© 2026 DentalSpa · Todos los derechos reservados</span><span>Ciudad de México</span></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════ NOSOTROS PAGE ═══════════════ -->
+<div id="page-nosotros" class="page">
+  <div class="about-hero">
+    <div class="about-hero-content">
+      <div class="section-label" style="color:var(--mint-light)">Quiénes somos</div>
+      <h1><em>DentalSpa</em> —<br>tu bienestar es<br>nuestra misión</h1>
+      <p style="margin-top:20px">Somos una clínica dental especializada en Ciudad de México, comprometida con la excelencia clínica y la calidez humana en cada consulta.</p>
+    </div>
+  </div>
+
+  <section class="about-mission">
+    <div class="about-mission-img reveal">
+      <img src="https://i.ibb.co/HDsJGRy3/2025-06-27.jpg" alt="Doctora DentalSpa">
+    </div>
+    <div class="reveal">
+      <div class="section-label">Nuestra filosofía</div>
+      <h2 class="section-title">Más que una clínica,<br>un espacio de cuidado</h2>
+      <p class="section-sub">En DentalSpa creemos que visitar al dentista debe ser una experiencia cómoda, tranquila y sin estrés. Por eso diseñamos cada detalle de nuestra clínica pensando en el bienestar del paciente.</p>
+      <p class="section-sub" style="margin-top:16px">Combinamos tecnología de vanguardia con un trato humano y cercano, porque sabemos que la confianza entre paciente y especialista es la base de cualquier tratamiento exitoso.</p>
+      <div style="display:flex;gap:32px;margin-top:36px;flex-wrap:wrap">
+        <div><div class="stat-num">6+</div><div class="stat-label">Especialidades</div></div>
+        <div><div class="stat-num">5★</div><div class="stat-label">Calificación Google</div></div>
+        <div><div class="stat-num">100%</div><div class="stat-label">Digital</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-values">
+    <div class="reveal" style="text-align:center;margin-bottom:0">
+      <div class="section-label">Lo que nos define</div>
+      <h2 class="section-title">Nuestros Valores</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <div class="value-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>Excelencia Clínica</h3>
+        <p>Nos capacitamos continuamente en las técnicas más avanzadas para ofrecerte los mejores resultados posibles en cada tratamiento.</p>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+        <h3>Trato Humano</h3>
+        <p>Escuchamos tus necesidades y miedos con empatía. Aquí eres una persona, no un número. Tu comodidad emocional importa tanto como tu salud dental.</p>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="17" y1="17" x2="22" y2="22"/></svg></div>
+        <h3>Transparencia</h3>
+        <p>Te explicamos cada procedimiento con claridad, sin sorpresas en precios ni en tiempos. Tomamos decisiones juntos, informados y con confianza.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-team">
+    <div class="reveal">
+      <div class="section-label">Nuestra especialista</div>
+      <h2 class="section-title">Conoce a tu doctora</h2>
+    </div>
+    <div class="team-card reveal">
+      <div class="team-card-img"><img src="https://i.ibb.co/HDsJGRy3/2025-06-27.jpg" alt="Doctora"></div>
+      <div class="team-card-body">
+        <h3>Dra. DentalSpa</h3>
+        <div class="role">Especialista · Endodoncia & Microscopía Dental</div>
+        <p>Especialista en endodoncia con formación en microscopía dental operatoria. Apasionada por la odontología conservadora y convencida de que siempre es mejor salvar el diente natural. Con años de experiencia clínica y actualización constante, ofrece tratamientos de la más alta calidad en un entorno de confianza y tranquilidad.</p>
+        <div style="margin-top:20px">
+          <a href="https://wa.me/525564030900?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20consulta%20con%20la%20Doctora" target="_blank" class="btn-whatsapp" style="display:inline-flex">
+            <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Agendar Consulta
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div><div class="footer-logo" onclick="showPage('home')"><div class="footer-logo-icon" style="overflow:hidden;border-radius:50%;background:white;"><img src="https://i.ibb.co/d0z3b1Jm/Logo.png" alt="Logo" style="width:100%;height:100%;object-fit:contain;"></div><span class="footer-logo-text">DentalSpa</span></div><p class="footer-desc">Clínica dental especializada con tecnología de vanguardia en CDMX.</p></div>
+      <div><h4>Servicios</h4><ul><li><span onclick="showPage('servicios')">Ortodoncia</span></li><li><span onclick="showPage('servicios')">Implantología</span></li><li><span onclick="showPage('servicios')">Endodoncia</span></li><li><span onclick="showPage('servicios')">Periodoncia</span></li></ul></div>
+      <div><h4>Clínica</h4><ul><li><span onclick="showPage('nosotros')">Nosotros</span></li><li><span onclick="showPage('contacto')">Contacto</span></li></ul></div>
+      <div><h4>Contacto</h4><ul><li><a href="https://wa.me/525564030900" target="_blank">+52 55 6403 0900</a></li><li style="color:rgba(255,255,255,.4);font-size:13px;margin-top:8px">Altata 53, Hipódromo<br>Cuauhtémoc, CDMX</li></ul></div>
+      <div class="footer-bottom"><span>© 2026 DentalSpa · Todos los derechos reservados</span><span>Ciudad de México</span></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════ CONTACTO PAGE ═══════════════ -->
+<div id="page-contacto" class="page">
+  <div class="contact-hero">
+    <div>
+      <div class="section-label" style="color:var(--mint-light)">Estamos aquí</div>
+      <h1>Visítanos o<br><em>escríbenos</em></h1>
+    </div>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <h2 class="section-title">Información<br>de contacto</h2>
+      <div class="contact-item">
+        <div class="contact-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div>
+          <div class="contact-item-title">Dirección</div>
+          <div class="contact-item-value"><a href="https://maps.app.goo.gl/aPU86CDpbwGheztTA" target="_blank">Altata 53, Col. Hipódromo<br>Cuauhtémoc, 06100<br>Ciudad de México, CDMX</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.12 2.24 2 2 0 012.11 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.46-.46a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg></div>
+        <div>
+          <div class="contact-item-title">Teléfono / WhatsApp</div>
+          <div class="contact-item-value"><a href="https://wa.me/525564030900" target="_blank">+52 55 6403 0900</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
+        <div>
+          <div class="contact-item-title">Horarios</div>
+          <div class="contact-item-value">Lunes – Viernes: 9:00 – 19:00<br>Sábado: 9:00 – 14:00</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#5BC4C0" stroke-width="1.8" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+        <div>
+          <div class="contact-item-title">Citas</div>
+          <div class="contact-item-value">Solo con cita previa<br>por WhatsApp</div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="contact-map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.0!2d-99.1726!3d19.4178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zAltata+53%2C+Hipodromo%2C+Mexico+City!5e0!3m2!1ses!2smx!4v1234567890"
+          width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+      <div style="margin-top:16px;text-align:center">
+        <a href="https://maps.app.goo.gl/aPU86CDpbwGheztTA" target="_blank" class="btn-primary" style="display:inline-flex">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Abrir en Google Maps
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <section class="contact-wa-section">
+    <div class="section-label">Agenda ahora</div>
+    <h2>¿Listo para tu<br><em style="font-style:italic;color:var(--mint)">primera consulta</em>?</h2>
+    <p>Elige el tipo de mensaje que quieres enviarnos y te contactamos de inmediato</p>
+    <div class="wa-buttons">
+      <a href="https://wa.me/525564030900?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20primera%20cita%20en%20DentalSpa" target="_blank" class="wa-btn">
+        <svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Agendar Primera Cita
+      </a>
+      <a href="https://wa.me/525564030900?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20un%20tratamiento%20en%20DentalSpa" target="_blank" class="wa-btn outlined">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#25D366" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Hacer una Pregunta
+      </a>
+      <a href="https://wa.me/525564030900?text=Hola%2C%20necesito%20informes%20sobre%20precios%20en%20DentalSpa" target="_blank" class="wa-btn outlined">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#25D366" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Preguntar Precios
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div><div class="footer-logo" onclick="showPage('home')"><div class="footer-logo-icon" style="overflow:hidden;border-radius:50%;background:white;"><img src="https://i.ibb.co/d0z3b1Jm/Logo.png" alt="Logo" style="width:100%;height:100%;object-fit:contain;"></div><span class="footer-logo-text">DentalSpa</span></div><p class="footer-desc">Clínica dental especializada en Ciudad de México.</p></div>
+      <div><h4>Servicios</h4><ul><li><span onclick="showPage('servicios')">Ortodoncia</span></li><li><span onclick="showPage('servicios')">Implantología</span></li><li><span onclick="showPage('servicios')">Endodoncia</span></li></ul></div>
+      <div><h4>Clínica</h4><ul><li><span onclick="showPage('nosotros')">Nosotros</span></li><li><span onclick="showPage('contacto')">Contacto</span></li></ul></div>
+      <div><h4>Dirección</h4><ul><li style="color:rgba(255,255,255,.5);font-size:13px;line-height:1.7">Altata 53, Col. Hipódromo<br>Cuauhtémoc, 06100<br>Ciudad de México</li><li style="margin-top:10px"><a href="https://wa.me/525564030900" target="_blank">+52 55 6403 0900</a></li></ul></div>
+      <div class="footer-bottom"><span>© 2026 DentalSpa · Todos los derechos reservados</span><span>Ciudad de México, México</span></div>
+    </div>
+  </footer>
+</div>
+
+<!-- FLOATING WA -->
+<a href="https://wa.me/525564030900?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20cita%20en%20DentalSpa" target="_blank" class="floating-wa" title="Agendar por WhatsApp">
+  <div class="floating-wa-pulse"></div>
+  <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+const WA = 'https://wa.me/525564030900';
+
+function goWhatsApp(msg) {
+  window.open(WA + '?text=' + encodeURIComponent(msg), '_blank');
+}
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-links a[data-page]').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === name);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(initReveal, 100);
+}
+
+function toggleMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+// Close menu on outside click
+document.addEventListener('click', e => {
+  const menu = document.getElementById('mobile-menu');
+  if (menu.classList.contains('open') && !e.target.closest('#mobile-menu') && !e.target.closest('.hamburger')) {
+    menu.classList.remove('open');
+  }
+});
+
+function initReveal() {
+  const reveals = document.querySelectorAll('.page.active .reveal:not(.visible)');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 70);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => obs.observe(el));
+}
+
+// Stagger grid children
+document.querySelectorAll('.services-grid, .values-grid, .gallery-layout, .cita-options, .tech-features').forEach(parent => {
+  [...parent.children].forEach((el, i) => {
+    if (el.classList.contains('reveal')) el.style.transitionDelay = (i * 0.08) + 's';
+  });
+});
+
+initReveal();
+</script>
+</body>
+</html>
